@@ -1,0 +1,78 @@
+apiVersion: policy.linkerd.io/v1alpha1
+kind: MeshTLSAuthentication
+metadata:
+  name: authors-meshauth
+  namespace: booksapp
+spec:
+  identityRefs:
+    - kind: ServiceAccount
+      name: books
+    - kind: ServiceAccount
+      name: webapp
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: MeshTLSAuthentication
+metadata:
+  name: books-meshauth
+  namespace: booksapp
+spec:
+  identityRefs:
+    - kind: ServiceAccount
+      name: authors
+    - kind: ServiceAccount
+      name: webapp
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: MeshTLSAuthentication
+metadata:
+  name: webapp-meshauth
+  namespace: booksapp
+spec:
+  identityRefs:
+    - kind: ServiceAccount
+      name: traffic
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: authors-policy
+  namespace: booksapp
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: authors
+  requiredAuthenticationRefs:
+    - name: authors-meshauth
+      kind: MeshTLSAuthentication
+      group: policy.linkerd.io
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: books-policy
+  namespace: booksapp
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: books-server
+  requiredAuthenticationRefs:
+    - name: books-meshauth
+      kind: MeshTLSAuthentication
+      group: policy.linkerd.io
+---
+apiVersion: policy.linkerd.io/v1alpha1
+kind: AuthorizationPolicy
+metadata:
+  name: webapp-policy
+  namespace: booksapp
+spec:
+  targetRef:
+    group: policy.linkerd.io
+    kind: Server
+    name: webapp-server
+  requiredAuthenticationRefs:
+    - name: webapp-meshauth
+      kind: MeshTLSAuthentication
+      group: policy.linkerd.io

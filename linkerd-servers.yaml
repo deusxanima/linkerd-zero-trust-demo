@@ -1,0 +1,35 @@
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  namespace: booksapp
+  name: authors-server
+spec:
+  podSelector:
+    matchLabels:
+      app: authors
+  port: service
+  proxyProtocol: TCP
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  namespace: booksapp
+  name: books-server
+spec:
+  podSelector:
+    matchLabels:
+      app: books
+  port: service
+  proxyProtocol: TCP
+---
+apiVersion: policy.linkerd.io/v1beta1
+kind: Server
+metadata:
+  namespace: booksapp
+  name: webapp-server
+spec:
+  podSelector:
+    matchLabels:
+      app: webapp
+  port: service
+  proxyProtocol: TCP

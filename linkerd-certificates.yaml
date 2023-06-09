@@ -1,0 +1,148 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: linkerd-identity-issuer
+  namespace: linkerd
+spec:
+  commonName: identity.linkerd.cluster.local
+  isCA: true
+  usages:
+  - cert sign
+  - crl sign
+  - server auth
+  - client auth
+  duration: 48h
+  renewBefore: 25h
+  issuerRef:
+    name: linkerd-identity-issuer
+    kind: ClusterIssuer
+  privateKey:
+    algorithm: ECDSA
+  secretName: linkerd-identity-issuer
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: linkerd-policy-validator
+  namespace: linkerd
+spec:
+  secretName: linkerd-policy-validator-k8s-tls
+  duration: 24h
+  renewBefore: 1h
+  issuerRef:
+    name: linkerd-webhook-issuer
+    kind: ClusterIssuer
+  commonName: linkerd-policy-validator.linkerd.svc
+  dnsNames:
+  - linkerd-policy-validator.linkerd.svc
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+    encoding: PKCS8
+  usages:
+  - server auth
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: linkerd-proxy-injector
+  namespace: linkerd
+spec:
+  secretName: linkerd-proxy-injector-k8s-tls
+  duration: 24h
+  renewBefore: 1h
+  issuerRef:
+    name: linkerd-webhook-issuer
+    kind: ClusterIssuer
+  commonName: linkerd-proxy-injector.linkerd.svc
+  dnsNames:
+  - linkerd-proxy-injector.linkerd.svc
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+  usages:
+  - server auth
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: linkerd-sp-validator
+  namespace: linkerd
+spec:
+  secretName: linkerd-sp-validator-k8s-tls
+  duration: 24h
+  renewBefore: 1h
+  issuerRef:
+    name: linkerd-webhook-issuer
+    kind: ClusterIssuer
+  commonName: linkerd-sp-validator.linkerd.svc
+  dnsNames:
+  - linkerd-sp-validator.linkerd.svc
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+  usages:
+  - server auth
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tap
+  namespace: linkerd-viz
+spec:
+  secretName: tap-k8s-tls
+  duration: 24h
+  renewBefore: 1h
+  issuerRef:
+    name: linkerd-webhook-issuer
+    kind: ClusterIssuer
+  commonName: tap.linkerd-viz.svc
+  dnsNames:
+  - tap.linkerd-viz.svc
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+  usages:
+  - server auth
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: linkerd-tap-injector
+  namespace: linkerd-viz
+spec:
+  secretName: tap-injector-k8s-tls
+  duration: 24h
+  renewBefore: 1h
+  issuerRef:
+    name: linkerd-webhook-issuer
+    kind: ClusterIssuer
+  commonName: tap-injector.linkerd-viz.svc
+  dnsNames:
+  - tap-injector.linkerd-viz.svc
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+  usages:
+  - server auth
+---
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: jaeger-injector
+  namespace: linkerd-jaeger
+spec:
+  secretName: jaeger-injector-k8s-tls
+  duration: 24h
+  renewBefore: 1h
+  issuerRef:
+    name: linkerd-webhook-issuer
+    kind: ClusterIssuer
+  commonName: jaeger-injector.linkerd-jaeger.svc
+  dnsNames:
+  - jaeger-injector.linkerd-jaeger.svc
+  isCA: false
+  privateKey:
+    algorithm: ECDSA
+  usages:
+  - server auth
